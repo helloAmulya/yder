@@ -22,14 +22,14 @@ export default function YouTubeDownloader() {
         });
       }, 300);
 
-      // const response = await fetch(
-      //   `http://localhost:5002/video-info?url=${encodeURIComponent(url)}`
-      // );
       const response = await fetch(
-        `https://yder-production.up.railway.app/video-info?url=${encodeURIComponent(
-          url
-        )}`
+        `http://localhost:5002/video-info?url=${encodeURIComponent(url)}`
       );
+      // const response = await fetch(
+      //   `https://yder-production.up.railway.app/video-info?url=${encodeURIComponent(
+      //     url
+      //   )}`
+      // );
 
       const data = await response.json();
 
@@ -163,7 +163,7 @@ export default function YouTubeDownloader() {
         </div>
       )}
 
-      <footer className="fixed bottom-0 left-0 w-full bg-black text-white py-2 px-4 flex justify-between items-center">
+      <footer className="fixed bottom-0 left-0 w-full bg-black text-white py-2 px-4  flex justify-between items-center">
         <div className="text-lg font-bold">@yder</div>
         <div className="text-sm">Made with ❤️ </div>
         <div className="text-sm">India</div>

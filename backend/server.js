@@ -43,11 +43,10 @@ app.get("/video-info", async (req, res) => {
       });
       const videoFormats = Array.from(uniqueFormats.values());
 
-      // Extract unique audio formats, remove duplicates & invalid bitrates
       const uniqueAudioFormats = new Map();
       data.formats
-        .filter((f) => f.url && f.vcodec === "none" && f.abr && f.abr > 0) // Ensure valid audio
-        .sort((a, b) => b.abr - a.abr) // Sort by bitrate (best first)
+        .filter((f) => f.url && f.vcodec === "none" && f.abr && f.abr > 0)
+        .sort((a, b) => b.abr - a.abr) 
         .forEach((f) => {
           if (!uniqueAudioFormats.has(f.abr)) {
             uniqueAudioFormats.set(f.abr, {
