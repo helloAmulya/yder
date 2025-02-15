@@ -22,9 +22,15 @@ export default function YouTubeDownloader() {
         });
       }, 300);
 
+      // const response = await fetch(
+      //   `http://localhost:5002/video-info?url=${encodeURIComponent(url)}`
+      // );
       const response = await fetch(
-        `http://localhost:5002/video-info?url=${encodeURIComponent(url)}`
+        `https://yder-production.up.railway.app/video-info?url=${encodeURIComponent(
+          url
+        )}`
       );
+
       const data = await response.json();
 
       clearInterval(interval);
@@ -93,13 +99,14 @@ export default function YouTubeDownloader() {
           <p className="mt-6 md:mt-6 text-center text-4xl md:text-5xl text-gray-600  w-full px-4">
             {`{ Open source, No ads, and Secure }`}
           </p>
-         
         </div>
       </div>
 
       {videoInfo && (
         <div className="mt-4 p-4 bg-gray-800 rounded-md w-full max-w-2xl">
-          <h2 className="text-2xl md:text-2xl font-semibold">{videoInfo.title}</h2>
+          <h2 className="text-2xl md:text-2xl font-semibold">
+            {videoInfo.title}
+          </h2>
           <img
             src={videoInfo.thumbnails[videoInfo.thumbnails.length - 1].url}
             alt="Thumbnail"
@@ -164,4 +171,3 @@ export default function YouTubeDownloader() {
     </div>
   );
 }
-
