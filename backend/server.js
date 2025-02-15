@@ -1,6 +1,4 @@
 
-
-
 const express = require("express");
 const cors = require("cors");
 const { exec } = require("child_process");
@@ -46,7 +44,7 @@ app.get("/video-info", async (req, res) => {
       const uniqueAudioFormats = new Map();
       data.formats
         .filter((f) => f.url && f.vcodec === "none" && f.abr && f.abr > 0)
-        .sort((a, b) => b.abr - a.abr) 
+        .sort((a, b) => b.abr - a.abr)
         .forEach((f) => {
           if (!uniqueAudioFormats.has(f.abr)) {
             uniqueAudioFormats.set(f.abr, {
@@ -71,5 +69,10 @@ app.get("/video-info", async (req, res) => {
   });
 });
 
-const PORT = 5002;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+const PORT = process.env.PORT || 5002;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+// const PORT = 5002;
+// app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
