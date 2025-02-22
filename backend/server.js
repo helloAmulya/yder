@@ -111,8 +111,8 @@ app.get("/video-info", (req, res) => {
 
   console.log("Fetching video info for:", videoUrl);
 
-  // ✅ Run yt-dlp as a Python module
-  const ytDlpProcess = spawn("python3", ["-m", "yt_dlp", "-J", videoUrl]);
+  // ✅ Use "python" instead of "python3" (compatible with Railway)
+  const ytDlpProcess = spawn("python", ["-m", "yt_dlp", "-J", videoUrl]);
 
   let dataBuffer = "";
 
