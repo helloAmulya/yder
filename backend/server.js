@@ -90,32 +90,12 @@
 //   console.log(`🚀 Server running on port ${PORT}`);
 // });
 
-
 const express = require("express");
 const cors = require("cors");
-const { exec, execSync } = require("child_process");
-const fs = require("fs");
-const path = require("path");
+const { spawn } = require("child_process");
 
 const app = express();
 app.use(cors());
-
-const ytDlpPath = path.join(__dirname, "yt-dlp");
-
-// ✅ Download yt-dlp if it doesn't exist
-if (!fs.existsSync(ytDlpPath)) {
-  try {
-    console.log("⬇️ Downloading yt-dlp binary...");
-    execSync("curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o yt-dlp", { stdio: "inherit" });
-
-    // ✅ Make yt-dlp executable
-    execSync("chmod +x yt-dlp", { stdio: "inherit" });
-
-    console.log("✅ yt-dlp downloaded and made executable.");
-  } catch (err) {
-    console.error("❌ Failed to download yt-dlp:", err.message);
-  }
-}
 
 // ✅ Root Route
 app.get("/", (req, res) => {
@@ -123,22 +103,35 @@ app.get("/", (req, res) => {
 });
 
 // ✅ Video Info Route
-app.get("/video-info", async (req, res) => {
+app.get("/video-info", (req, res) => {
   const videoUrl = req.query.url;
   if (!videoUrl) {
     return res.status(400).json({ error: "Missing video URL" });
   }
 
-  const command = `${ytDlpPath} -J ${videoUrl}`;
+  console.log("Fetching video info for:", videoUrl);
 
-  exec(command, (error, stdout, stderr) => {
-    if (error) {
-      console.error("❌ Error fetching video info:", error.message);
+  // ✅ Run yt-dlp as a Python module
+  const ytDlpProcess = spawn("python3", ["-m", "yt_dlp", "-J", videoUrl]);
+
+  let dataBuffer = "";
+
+  ytDlpProcess.stdout.on("data", (chunk) => {
+    dataBuffer += chunk.toString();
+  });
+
+  ytDlpProcess.stderr.on("data", (chunk) => {
+    console.error("❌ yt-dlp error:", chunk.toString());
+  });
+
+  ytDlpProcess.on("close", (code) => {
+    if (code !== 0) {
       return res.status(500).json({ error: "Failed to fetch video details" });
     }
 
     try {
-      const data = JSON.parse(stdout);
+      const data = JSON.parse(dataBuffer);
+
       if (!data.formats) {
         return res.status(500).json({ error: "No formats found for this video" });
       }
