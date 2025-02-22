@@ -91,7 +91,6 @@
 // });
 
 
-
 const express = require("express");
 const cors = require("cors");
 const { exec, execSync } = require("child_process");
@@ -101,19 +100,24 @@ const path = require("path");
 const app = express();
 app.use(cors());
 
-// ✅ Download yt-dlp binary if not exists
 const ytDlpPath = path.join(__dirname, "yt-dlp");
+
+// ✅ Download yt-dlp if it doesn't exist
 if (!fs.existsSync(ytDlpPath)) {
   try {
     console.log("⬇️ Downloading yt-dlp binary...");
-    execSync("curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o yt-dlp && chmod +x yt-dlp");
-    console.log("✅ yt-dlp downloaded successfully.");
+    execSync("curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o yt-dlp", { stdio: "inherit" });
+
+    // ✅ Make yt-dlp executable
+    execSync("chmod +x yt-dlp", { stdio: "inherit" });
+
+    console.log("✅ yt-dlp downloaded and made executable.");
   } catch (err) {
     console.error("❌ Failed to download yt-dlp:", err.message);
   }
 }
 
-// ✅ Root Route to prevent "Cannot GET /"
+// ✅ Root Route
 app.get("/", (req, res) => {
   res.send("✅ Server is running! Use /video-info with a URL parameter.");
 });
