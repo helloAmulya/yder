@@ -112,6 +112,7 @@ app.get("/video-info", (req, res) => {
   console.log("Fetching video info for:", videoUrl);
 
   // ✅ Use "python" instead of "python3" (compatible with Railway)
+  // const ytDlpProcess = spawn("python", ["-m", "yt_dlp", "-J", videoUrl]);
   const ytDlpProcess = spawn("python", ["-m", "yt_dlp", "-J", videoUrl]);
 
   let dataBuffer = "";
