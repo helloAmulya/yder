@@ -160,7 +160,7 @@
 //   console.log(`🚀 Server running on port ${PORT}`);
 // });
 
- 
+
 const express = require("express");
 const cors = require("cors");
 const { exec } = require("child_process");
@@ -169,6 +169,8 @@ const path = require("path");
 
 const app = express();
 app.use(cors());
+
+
 
 // ✅ Root Route
 app.get("/", (req, res) => {
@@ -293,6 +295,14 @@ app.get("/download", async (req, res) => {
     });
   });
 });
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
+
 
 // ✅ Start Server
 const PORT = process.env.PORT || 5002;
