@@ -22,14 +22,15 @@ export default function YouTubeDownloader() {
         });
       }, 300);
 
-      const response = await fetch(
-        `http://localhost:5002/video-info?url=${encodeURIComponent(url)}`
-      );
-
       // const response = await fetch(
-      //   `https://web-production-e995b.up.railway.app/video-info?url=${encodeURIComponent(url)}`
+      //   `http://localhost:5002/video-info?url=${encodeURIComponent(url)}`
       // );
-      
+
+      const response = await fetch(
+        `https://web-production-fb68.up.railway.app/video-info?url=${encodeURIComponent(
+          url
+        )}`
+      );
 
       const data = await response.json();
 
